@@ -129,6 +129,8 @@ def run_solver(n: int, p: np.ndarray, num_transmissions: int, seed: int) -> None
     print(f"Steady-state       {steady_analytic:12.6f}   {steady_sim:12.6f}")
     print(f"Myopic             {myopic_analytic:12.6f}   {myopic_sim:12.6f}")
     print(f"Optimal            {optimal_analytic:12.6f}   {optimal_sim:12.6f}")
+    inverse_length_gain = ((1/optimal_analytic) - (1/myopic_analytic)) / (1/myopic_analytic) * 100.0
+    print(f"\nOptimal inverse-length gain over myopic: {inverse_length_gain:.4f}%")
 
 
 def main() -> None:

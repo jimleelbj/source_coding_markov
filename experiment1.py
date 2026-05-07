@@ -1,6 +1,5 @@
 import heapq
 import numpy as np
-import matplotlib.pyplot as plt
 
 np.random.seed(0)
 
@@ -59,6 +58,21 @@ def relative_value_iteration(
     tolerance: float = 1e-11,
     max_iterations: int = 20000,
 ):
+    optimal_policy, optimal_cost, _, _ = relative_value_iteration_details(
+        T_actions,
+        c_actions,
+        tolerance=tolerance,
+        max_iterations=max_iterations,
+    )
+    return optimal_policy, optimal_cost
+
+
+def relative_value_iteration_details(
+    T_actions: list[np.ndarray],
+    c_actions: list[np.ndarray],
+    tolerance: float = 1e-11,
+    max_iterations: int = 20000,
+):
     """Solve average-cost MDP via relative value iteration.
 
     This avoids policy-oscillation issues that may appear with direct
@@ -87,7 +101,7 @@ def relative_value_iteration(
         q_values[action_idx] = c_actions[action_idx] + T_actions[action_idx] @ bias
     optimal_policy = list(np.argmin(q_values, axis=0))
     optimal_cost, _, _, _ = evaluate_policy(optimal_policy, T_actions, c_actions)
-    return optimal_policy, optimal_cost
+    return optimal_policy, optimal_cost, bias, q_values
 
 
 def compute_powers(P: np.ndarray, N: int) -> list[np.ndarray]:
@@ -177,6 +191,8 @@ def steady_state_policy(P: np.ndarray, N: int, all_actions: list[list[int]]) -> 
 
 
 def main():
+    import matplotlib.pyplot as plt
+
     N = 4
     alpha = 0.5
     num_transmissions = 1_000_000
